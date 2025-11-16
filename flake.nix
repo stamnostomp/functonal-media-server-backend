@@ -11,8 +11,10 @@
       let
         pkgs = nixpkgs.legacyPackages.${system};
         
-        # Using GHC 9.4 as required by the project (base ^>=4.18.0.0)
-        haskellPackages = pkgs.haskell.packages.ghc94;
+        # Using GHC 9.6 for better tooling support (HLS works)
+        # Note: Your cabal file specifies base ^>=4.18.0.0 which is GHC 9.4
+        # You may need to relax this constraint to: base >=4.18 && <5
+        haskellPackages = pkgs.haskell.packages.ghc96;
         
         # Override for your package - note: cabal file is named "jellyfin-hs"
         jellyfin-hs = haskellPackages.callCabal2nix "jellyfin-hs" ./. { };
@@ -29,7 +31,7 @@
           buildInputs = with pkgs; [
             # Haskell development tools
             haskellPackages.cabal-install
-            haskellPackages.haskell-language-server
+            haskellPackages.haskell-language-server  # Works with GHC 9.6
             haskellPackages.ghcid
             haskellPackages.hlint
             haskellPackages.ormolu
@@ -65,12 +67,12 @@
             echo "  hoogle server --local - Start local Hoogle server"
             echo ""
             echo "Environment variables (set in .env or export):"
-            echo "  DB_HOST=${DB_HOST:-localhost}"
-            echo "  DB_PORT=${DB_PORT:-5432}"
-            echo "  DB_USER=${DB_USER:-jellyfin}"
-            echo "  DB_NAME=${DB_NAME:-jellyfin}"
-            echo "  SERVER_PORT=${SERVER_PORT:-8080}"
-            echo "  MEDIA_ROOT=${MEDIA_ROOT:-./media}"
+            echo "  DB_HOST=\''${DB_HOST:-localhost}"
+            echo "  DB_PORT=\''${DB_PORT:-5432}"
+            echo "  DB_USER=\''${DB_USER:-jellyfin}"
+            echo "  DB_NAME=\''${DB_NAME:-jellyfin}"
+            echo "  SERVER_PORT=\''${SERVER_PORT:-8080}"
+            echo "  MEDIA_ROOT=\''${MEDIA_ROOT:-./media}"
             echo ""
             
             # Set default environment variables
