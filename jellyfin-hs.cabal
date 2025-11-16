@@ -1,0 +1,48 @@
+cabal-version:      3.0
+name:               jellyfin-hs
+version:            0.1.0.0
+synopsis:           Haskell backend for Jellyfin-like media server
+description:        A media server backend with video streaming via ffmpeg and PostgreSQL storage
+license:            MIT
+author:             stamno
+maintainer:         stamno
+category:           Web
+build-type:         Simple
+
+common warnings
+    ghc-options: -Wall
+
+executable jellyfin-hs
+    import:           warnings
+    main-is:          Main.hs
+    other-modules:
+        Server
+        Api
+        Database
+        Media.FFmpeg
+        Media.Scanner
+        Types
+    build-depends:
+        base ^>=4.18.0.0,
+        servant >= 0.20,
+        servant-server >= 0.20,
+        warp >= 3.3,
+        aeson >= 2.0,
+        text >= 2.0,
+        bytestring >= 0.11,
+        postgresql-simple >= 0.7,
+        resource-pool >= 0.4,
+        process >= 1.6,
+        directory >= 1.3,
+        filepath >= 1.4,
+        streaming-commons >= 0.2,
+        conduit >= 1.3,
+        conduit-extra >= 1.3,
+        wai >= 3.2,
+        wai-cors >= 0.2,
+        http-media >= 0.8,
+        time >= 1.12,
+        mtl >= 2.3
+    hs-source-dirs:   src
+    default-language: Haskell2010
+    ghc-options:      -threaded -rtsopts -with-rtsopts=-N
